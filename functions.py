@@ -110,6 +110,44 @@ def preprocess_data(df):
     
     return df, df_normalized, df_standardized
 
+def preprocess_data_dos(df):
+    """
+    Preprocesa los datos ajustando precios por stock splits y sumando dividendos.
+    También crea un conjunto de datos normalizado/estandarizado para futuros análisis.
+    """
+    
+    # 1. Ajuste de precios y volumen por stock splits
+    for col in ['open', 'high', 'low', 'close', 'volume']:
+        df[col] = df[col] / (df['stock_splits'].replace(0, 1).cumprod())
+    
+    # 2. Suma acumulativa de dividendos
+    df['dividend_return'] = df['dividends'].cumsum()
+    
+    # 3. Crear nuevas características antes de normalización/estandarización
+    df['log_return'] = np.log(df['close'] / df['close'].shift(1))
+    df['volatility'] = df['log_return'].rolling(window=30).std() * np.sqrt(30)
+    df['ma50'] = df['close'].rolling(window=50).mean()
+    df['ma100'] = df['close'].rolling(window=100).mean()
+    df['volume_to_price'] = df['volume'] / df['close']
+    
+    # 4. Eliminar valores NaN
+    df.dropna(inplace=True)
+    
+    # 5. Normalización (Min-Max Scaling)
+    scaler = MinMaxScaler()
+    df_normalized = df.copy()
+    df_normalized[['open', 'high', 'low', 'close', 'volume']] = scaler.fit_transform(df[['open', 'high', 'low', 'close', 'volume']])
+    
+    # 6. Estandarización (StandardScaler)
+    standard_scaler = StandardScaler()
+    df_standardized = df.copy()
+    df_standardized[['open', 'high', 'low', 'close', 'volume']] = standard_scaler.fit_transform(df[['open', 'high', 'low', 'close', 'volume']])
+    
+    print("Preprocesamiento completo. Se han generado versiones con los datos ajustados, normalizados y estandarizados.")
+    
+    return df, df_normalized, df_standardized
+
+
 #----------------------------------------------------------------
 #EDA
 def perform_eda(df):
