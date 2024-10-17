@@ -147,6 +147,19 @@ def preprocess_data_dos(df):
     
     return df, df_normalized, df_standardized
 
+def adjust_for_splits(df):
+    """
+    Ajusta los precios y volumenes por stock splits.
+    """
+    # Si stock_splits es 0, lo reemplazamos con 1 para evitar divisiones por cero
+    df['stock_splits'] = df['stock_splits'].replace(0, 1)
+    
+    # Ajustar precios y volumen por los splits
+    for col in ['open', 'high', 'low', 'close', 'volume']:
+        df[col] = df[col] / df['stock_splits'].cumprod()
+    
+    return df
+
 
 #----------------------------------------------------------------
 #EDA
