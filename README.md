@@ -1,7 +1,7 @@
 # Gigantes Tecnológicos
 
 <div align="center">
-  <img src="https://files.oaiusercontent.com/file-GpujzPHvyDB3iQL1WY36Ou6z?se=2024-10-22T18%3A10%3A40Z&sp=r&sv=2024-08-04&sr=b&rscc=max-age%3D604800%2C%20immutable%2C%20private&rscd=attachment%3B%20filename%3Dcaf50798-8e46-4509-9cc4-ed420ee26ae3.webp&sig=J98PhbP43DG6m1H5vZbpD8w90j/eqXpWFyI9HPoQb/k%3D" alt="Gigantes Tecnológicos" width="400"/>
+  <img src="https://th.bing.com/th/id/OIG1.HIPOpMwWCqRYlyP92s1A?pid=ImgGn" width="400"/>
 </div>
 
 Este proyecto titulado **Gigantes Tecnológicos** representa el dominio de las grandes empresas tecnológicas mediante una metáfora visual de gigantes mitológicos en un entorno futurista. El proyecto incluye predicciones de precios para las principales empresas tecnológicas hasta el año 2030.
