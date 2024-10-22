@@ -116,9 +116,9 @@ def preprocess_data_dos(df):
     También crea un conjunto de datos normalizado/estandarizado para futuros análisis.
     """
     
-    # 1. Ajuste de precios y volumen por stock splits
-    for col in ['open', 'high', 'low', 'close', 'volume']:
-        df[col] = df[col] / (df['stock_splits'].replace(0, 1).cumprod())
+    # # 1. Ajuste de precios y volumen por stock splits
+    # for col in ['open', 'high', 'low', 'close', 'volume']:
+    #     df[col] = df[col] / (df['stock_splits'].replace(0, 1).cumprod())
     
     # 2. Suma acumulativa de dividendos
     df['dividend_return'] = df['dividends'].cumsum()
