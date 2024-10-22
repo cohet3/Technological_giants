@@ -10,10 +10,9 @@ from sklearn.linear_model import LinearRegression
 from statsmodels.tsa.arima.model import ARIMA # type: ignore
 from statsmodels.tsa.statespace.sarimax import SARIMAX # type: ignore
 
-
-
-import matplotlib.pyplot as plt
 import seaborn as sns
+import matplotlib.pyplot as plt
+
 # Dowload Data
 def download_stock_data(ticker):
     """
@@ -163,65 +162,84 @@ def adjust_for_splits(df):
 
 #----------------------------------------------------------------
 #EDA
-def perform_eda(df):
-    """
-    Realiza un análisis exploratorio de datos (EDA) visualizando tendencias, distribuciones y correlaciones.
-    """
 
-    # Configurar estilo de gráficos
-    sns.set(style="whitegrid")
-    
-    # 1. Visualización de Tendencias de Precios
-    plt.figure(figsize=(12, 6))
-    plt.plot(df.index, df['close'], label='Precio de Cierre')
-    plt.title('Evolución del Precio de Cierre Ajustado (AAPL)')
-    plt.xlabel('Fecha')
-    plt.ylabel('Precio ($)')
-    plt.legend()
+def describe_data(df):
+    """ Descripción general del DataFrame """
+    print("Descripción general del DataFrame:")
+    print(df.info())
+    print("\nPrimeras 5 filas:")
+    print(df.head())
+    print("\nDescripción estadística de las variables numéricas:")
+    print(df.describe())
+
+def plot_distributions(df):
+    """ Gráficos de distribuciones y boxplots para ver outliers """
+    # Histogramas de las distribuciones
+    df.hist(bins=30, figsize=(15, 10), color='skyblue')
+    plt.suptitle("Distribución de las variables numéricas")
     plt.show()
 
-    # 2. Análisis de Volumen de Transacciones
-    plt.figure(figsize=(12, 6))
-    plt.plot(df.index, df['volume'], label='Volumen de Transacciones', color='orange')
-    plt.title('Volumen de Transacciones (AAPL)')
+    # Boxplot para detectar outliers
+    plt.figure(figsize=(15, 8))
+    sns.boxplot(data=df)
+    plt.title("Boxplot de las variables numéricas")
+    plt.xticks(rotation=45)
+    plt.show()
+
+def plot_correlation_matrix(df):
+    """ Gráfico de la matriz de correlación """
+    corr_matrix = df.corr()
+    plt.figure(figsize=(12, 8))
+    sns.heatmap(corr_matrix, annot=True, cmap='coolwarm', linewidths=0.5)
+    plt.title("Matriz de correlación")
+    plt.show()
+
+def plot_time_series(df):
+    """ Graficar las series temporales más importantes """
+    plt.figure(figsize=(14, 8))
+
+    # Precio de cierre
+    plt.subplot(2, 2, 1)
+    plt.plot(df.index, df['close'], color='blue')
+    plt.title('Precio de Cierre')
+    plt.xlabel('Fecha')
+    plt.ylabel('Precio de Cierre')
+
+    # Volumen
+    plt.subplot(2, 2, 2)
+    plt.plot(df.index, df['volume'], color='orange')
+    plt.title('Volumen')
     plt.xlabel('Fecha')
     plt.ylabel('Volumen')
-    plt.legend()
-    plt.show()
 
-    # 3. Distribución de los Precios (histograma)
-    plt.figure(figsize=(12, 6))
-    sns.histplot(df['close'], bins=50, kde=True, color='blue')
-    plt.title('Distribución del Precio de Cierre (AAPL)')
-    plt.xlabel('Precio de Cierre ($)')
-    plt.ylabel('Frecuencia')
-    plt.show()
-
-    # 4. Distribución del Volumen (histograma)
-    plt.figure(figsize=(12, 6))
-    sns.histplot(df['volume'], bins=50, kde=True, color='orange')
-    plt.title('Distribución del Volumen de Transacciones (AAPL)')
-    plt.xlabel('Volumen')
-    plt.ylabel('Frecuencia')
-    plt.show()
-
-    # 5. Mapa de Calor de Correlaciones
-    plt.figure(figsize=(10, 8))
-    corr_matrix = df[['open', 'high', 'low', 'close', 'volume', 'dividends']].corr()
-    sns.heatmap(corr_matrix, annot=True, cmap="coolwarm", vmin=-1, vmax=1)
-    plt.title('Mapa de Calor de Correlaciones')
-    plt.show()
-
-    # 6. Suma Acumulada de Dividendos
-    plt.figure(figsize=(12, 6))
-    plt.plot(df.index, df['dividend_return'], label='Suma Acumulada de Dividendos', color='green')
-    plt.title('Suma Acumulada de Dividendos (AAPL)')
+    # Volatilidad
+    plt.subplot(2, 2, 3)
+    plt.plot(df.index, df['volatility'], color='red')
+    plt.title('Volatilidad')
     plt.xlabel('Fecha')
-    plt.ylabel('Dividendos Acumulados ($)')
-    plt.legend()
+    plt.ylabel('Volatilidad')
+
+    # Retorno diario
+    plt.subplot(2, 2, 4)
+    plt.plot(df.index, df['daily_return'], color='green')
+    plt.title('Retorno Diario')
+    plt.xlabel('Fecha')
+    plt.ylabel('Retorno')
+
+    plt.tight_layout()
     plt.show()
 
-    print("EDA completado.")
+def detect_outliers(df):
+    """ Detectar outliers en el DataFrame usando IQR """
+    Q1 = df.quantile(0.25)
+    Q3 = df.quantile(0.75)
+    IQR = Q3 - Q1
+    outliers = (df < (Q1 - 1.5 * IQR)) | (df > (Q3 + 1.5 * IQR))
+
+    # Mostrar cuántos outliers hay por variable
+    print("Número de outliers por variable:")
+    print(outliers.sum())
+
 #----------------------------------------------------------------
 # Modelos
 def train_regression_model(train_data, validation_data, features, target):
