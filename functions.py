@@ -239,7 +239,34 @@ def detect_outliers(df):
     # Mostrar cuántos outliers hay por variable
     print("Número de outliers por variable:")
     print(outliers.sum())
+#EDA y Limpieza comúm
+def eda_and_cleaning(df):
+    """
+    Función para realizar el EDA y la limpieza de datos de una compañía.
+    Aplica a cualquier DataFrame con datos de la compañía.
+    """
+    print("Descripción general del DataFrame:")
+    print(df.info())
+    print("\nDescripción estadística de las variables numéricas:")
+    print(df.describe())
+    
+    # Comprobar valores nulos y rellenar si es necesario
+    if df.isnull().sum().any():
+        print("Datos faltantes encontrados, realizando imputación con 'forward fill'.")
+        df.fillna(method='ffill', inplace=True)
+    
+    # Análisis de distribuciones y visualización de la matriz de correlación
+    plt.figure(figsize=(14, 8))
+    df.hist(bins=30, figsize=(14, 8))
+    plt.suptitle("Distribución de las variables numéricas")
+    plt.show()
+    
+    plt.figure(figsize=(12, 8))
+    sns.heatmap(df.corr(), annot=True, cmap='coolwarm')
+    plt.title("Matriz de Correlación")
+    plt.show()
 
+    return df
 #----------------------------------------------------------------
 # Modelos
 def train_regression_model(train_data, validation_data, features, target):
