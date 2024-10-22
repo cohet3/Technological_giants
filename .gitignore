@@ -1,2 +1,5 @@
 .env
 __pycache__
+output
+data_output
+data_output_draft
