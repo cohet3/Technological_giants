@@ -6,7 +6,7 @@
 
 Este proyecto titulado **Gigantes Tecnológicos** representa el dominio de las grandes empresas tecnológicas mediante una metáfora visual de gigantes mitológicos en un entorno futurista. El proyecto incluye predicciones de precios para las principales empresas tecnológicas hasta el año 2030.
 
-## Predicción de Precios de Acciones de Compañías Tecnológicas hasta 2030
+## Predicción de Precios de Acciones de Compañías Tecnológicas hasta 2030, [Visita la App](https://gigantstech.streamlit.app/)
 
 Este proyecto tiene como objetivo realizar predicciones de los precios de cierre ajustados de cinco grandes compañías tecnológicas utilizando el modelo **Prophet** de Facebook, y visualizar los resultados en gráficos interactivos. Las compañías analizadas son:
 
